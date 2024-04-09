@@ -1,4 +1,4 @@
-from pylitmus.types import BlockHash
+from pycspr.types.node.rpc import BlockHash
 # from pylitmus.types import Kernel
 
 

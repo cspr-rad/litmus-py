@@ -4,35 +4,40 @@ import pathlib
 import sys
 import typing
 
-_PATH_TO_BLOCKS = pathlib.Path("/Users/asladeofgreen/Work/cspr/l1/litmus/tests/assets/blocks")
+from pycspr import NodeRpcClient
+
+from pylitmus import chain
+
+
 
 _STORE_BY_HASH: dict = dict()
 _STORE_BY_HEIGHT: dict = dict()
 
-from pylitmus import decoder
-from pylitmus.types import Block
+import pycspr
+from pycspr.types.node.rpc import Block
 
 
 def init():
-    for _, _, fnames in os.walk(_PATH_TO_BLOCKS):
-        break
+    # TODO: intiialise
+    pass
 
-    for fname in fnames:
-        with open(_PATH_TO_BLOCKS / fname, "r") as fstream:            
-            block: Block = decoder.decode(Block, json.loads(fstream.read()))
+
+def get_block_by_hash(block_hash: chain.BlockHash) -> typing.Optional[Block]:
+    try:
+        return _STORE_BY_HASH[block_hash]
+    except KeyError:
+        pass
+
+
+def get_block_by_height(block_height: chain.BlockHeight) -> typing.Optional[Block]:
+    try:
+        return _STORE_BY_HEIGHT[block_height]
+    except KeyError:
+        pass
+
+
+def set_block(block: chain.Block):
+    if block.hash not in _STORE_BY_HASH:
         _STORE_BY_HASH[block.hash] = block
-        _STORE_BY_HEIGHT[block.header.height] = block
-
-
-def get_block_by_hash(block_id: bytes) -> typing.Optional[Block]:
-    try:
-        return _STORE_BY_HASH[block_id]
-    except KeyError:
-        pass
-
-
-def get_block_by_height(block_id: int) -> typing.Optional[Block]:
-    try:
-        return _STORE_BY_HEIGHT[block_id]
-    except KeyError:
-        pass
+    if block.height not in _STORE_BY_HEIGHT:
+        _STORE_BY_HEIGHT[block.height] = block

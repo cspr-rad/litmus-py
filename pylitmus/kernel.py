@@ -2,8 +2,8 @@ import dataclasses
 import enum
 import typing
 
-from pylitmus.types import BlockHash
-from pylitmus.types import EraInfo
+from pycspr.types.node.rpc import BlockHash
+from pycspr.types.node.rpc import EraEnd
 
 
 @dataclasses.dataclass
@@ -11,7 +11,7 @@ class Kernel:
     block_hash: BlockHash
     block_hash_of_parent: typing.Optional[BlockHash] = None
     block_height: typing.Optional[int] = None
-    era_info: typing.Optional[EraInfo] = None
+    era_end: typing.Optional[EraEnd] = None
 
 
 class KernelError(enum.Enum):
@@ -25,4 +25,3 @@ class KernelError(enum.Enum):
 @dataclasses.dataclass
 class KernelState:
     kernel: Kernel
-
