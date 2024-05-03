@@ -36,7 +36,7 @@ async def yield_until_tip(block: Block) -> typing.Generator:
     :returns: Generator over a set of blocks.
 
     """
-    parent_switch_block = parent_block = verifier.verify_switch_block(block)
+    parent_switch_block = parent_block = verifier.verify_block_at_era_end(block)
     while block is not None:
         try:
             block: Block = verifier.verify_block(

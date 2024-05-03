@@ -1,27 +1,45 @@
-import dataclasses
-import enum
-import typing
+import pycspr
 
-from pycspr.types.node import BlockHash
-from pycspr.types.node import EraEnd
-
-
-@dataclasses.dataclass
-class Kernel:
-    block_hash: BlockHash
-    block_hash_of_parent: typing.Optional[BlockHash] = None
-    block_height: typing.Optional[int] = None
-    era_end: typing.Optional[EraEnd] = None
+from pylitmus import cache
+from pylitmus import network
+from pylitmus import chain
+from pylitmus import verifier
 
 
-class KernelError(enum.Enum):
-    INVALID_BLOCK_HASH_UPON_INITIALIZATION = enum.auto()
-    INVALID_BLOCK_HASH_UPON_REVERSE_SYNC = enum.auto()
-    HISTORICAL_BLOCK_WHEN_PROGRESSING = enum.auto()
-    INVALID_ERA_ID = enum.auto()
-    INVALID_BLCK_SIGNATURES = enum.auto()
+async def init_from_trusted_block_height(block_height: chain.BlockHeight):
+    """Initialises light client from a trusted block height.
+
+    :param block_height: Height of trusted block.
+
+    """
+    try:
+        block: chain.Block = await network.get_block(block_height)
+    except Exception as err:
+        # TODO: handle exception
+        print(err)
+    else:
+        return await init_from_trusted_block_hash(block.hash)
 
 
-@dataclasses.dataclass
-class KernelState:
-    kernel: Kernel
+async def init_from_trusted_block_hash(block_hash: chain.BlockHash):
+    """Initialises light client from a trusted block hash.
+
+    :param block_hash: Hash of trusted block.
+
+    """
+    # Initialise trusted cache.
+    await cache.init()
+
+    # Descend chain -> most recent valid switch block.
+    async for block in chain.yield_until_previous_switch_block(block_hash):
+        pass
+
+    # Ascend chain -> tip.
+    async for block in chain.yield_until_tip(block):
+        cache.set_verified_block(block)
+
+    # Bind to SSE event channel and keep cache fresh.
+    # TODO
+
+    print(cache._STORE_BY_ERA.keys())
+    print(cache._STORE_BY_BLOCK[20])
