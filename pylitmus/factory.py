@@ -1,5 +1,5 @@
 from pylitmus.kernel import Kernel
-from pycspr.types.node.rpc import BlockHash
+from pycspr.types.node import BlockHash
 from pycspr import NodeRpcClient
 from pycspr import NodeRpcConnectionInfo
 from pycspr import NodeSseClient

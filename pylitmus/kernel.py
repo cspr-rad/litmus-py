@@ -2,8 +2,8 @@ import dataclasses
 import enum
 import typing
 
-from pycspr.types.node.rpc import BlockHash
-from pycspr.types.node.rpc import EraEnd
+from pycspr.types.node import BlockHash
+from pycspr.types.node import EraEnd
 
 
 @dataclasses.dataclass

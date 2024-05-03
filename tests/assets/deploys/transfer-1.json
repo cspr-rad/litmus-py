@@ -1,0 +1,67 @@
+{
+  "hash": "5334f0724c2b9edfee0c7e7e2f8f77f805e6b2a929232e5dcf41118f0ec0fe6e",
+  "header": {
+    "account": "0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de",
+    "timestamp": "2024-04-26T13:03:31.259Z",
+    "ttl": "30m",
+    "gas_price": 1,
+    "body_hash": "acae4f45d9f53539cf08bc3b1bce561e23ceebce296f0a5dc489412ee738abe4",
+    "dependencies": [],
+    "chain_name": "cspr-dev-cctl"
+  },
+  "payment": {
+    "ModuleBytes": {
+      "module_bytes": "",
+      "args": [
+        [
+          "amount",
+          {
+            "cl_type": "U512",
+            "bytes": "0500e8764817",
+            "parsed": "100000000000"
+          }
+        ]
+      ]
+    }
+  },
+  "session": {
+    "Transfer": {
+      "args": [
+        [
+          "amount",
+          {
+            "cl_type": "U512",
+            "bytes": "0400f90295",
+            "parsed": "2500000000"
+          }
+        ],
+        [
+          "target",
+          {
+            "cl_type": {
+              "ByteArray": 32
+            },
+            "bytes": "5a9eb1f7da515d9fa2f0b74e18ec84cccf90f146269d538073416dff432a3c77",
+            "parsed": "5a9eb1f7da515d9fa2f0b74e18ec84cccf90f146269d538073416dff432a3c77"
+          }
+        ],
+        [
+          "id",
+          {
+            "cl_type": {
+              "Option": "U64"
+            },
+            "bytes": "010b00000000000000",
+            "parsed": 11
+          }
+        ]
+      ]
+    }
+  },
+  "approvals": [
+    {
+      "signer": "0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de",
+      "signature": "013752ba8b203d5993a6301aff3fb9663953fc1b24d55c42b2294b77f2a47d43ede16ee227de7787ae55ed3a02ea0292a314c6b5591561214a2b5a71bf34655207"
+    }
+  ]
+}

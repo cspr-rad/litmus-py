@@ -1,49 +1,55 @@
-from pycspr.types.node.rpc import Block
-from pycspr.types.node.rpc import BlockHash
-from pycspr.types.node.rpc import BlockHeader
-from pycspr.types.node.rpc import BlockHeight
-from pylitmus import cache
-from pylitmus import node
+import typing
+
+from pycspr import NodeRpcProxyError
+from pycspr.types.node import Block
+from pycspr.types.node import BlockHash
+from pycspr.types.node import BlockHeight
+from pycspr.types.node import BlockID
+from pycspr.types.node import EraID
+
+from pylitmus import network
+from pylitmus import verifier
 
 
-def get_block_by_hash(block_hash: BlockHash) -> Block:
-    block: Block = cache.get_block_by_hash(block_hash)
-    if block is None:
-        raise ValueError("TODO: call network")
+async def yield_until_previous_switch_block(block_id: BlockID) -> typing.Generator:
+    """Yields verified historical blocks until a switch block is reached.
+    
+    :param block_hash: Hash of a trusted block.
+    :returns: Generator over a set of historical blocks.
 
-    return block
-
-
-def get_previous_switch_block(block_hash: BlockHash):
-    block: Block = cache.get_block_by_hash(block_hash)
-    if block is None:
-        raise ValueError("Block not found")
-    elif block.header.era_end is not None:
-        return block
-    else:
-        return get_previous_switch_block(block.header.parent_hash)
-
-
-def get_next_switch_block(block_height: BlockHeight):
-    block: Block = cache.get_block_by_height(block_height)
-    if block is None:
-        raise ValueError("Block not found")
-    elif block.header.era_end is not None:
-        return block
-    else:
-        return get_next_switch_block(block_height + 1)
-
-
-async def yield_until_switch_block(block_hash: BlockHash):
-    block: Block = await node.get_block(block_hash)
-    if block is None:
-        raise Exception(f"Invalid block hash: {block_hash.hex()}")
-
-    while block.is_switch_block is False:
+    """
+    block: Block = verifier.verify_block(
+        await network.get_block(block_id)
+    )
+    while block.is_switch is False:
         yield block
-
-        block: Block = await node.get_block(block.header.parent_hash)
-        if block is None:
-            raise Exception(f"Invalid block hash: {block_hash.hex()}")
-
+        block: Block = verifier.verify_block(
+            await network.get_block(block.header.parent_hash)
+        )
     yield block
+
+
+async def yield_until_tip(block: Block) -> typing.Generator:
+    """Yields future blocks until chain tip is reached.
+    
+    :param block_height: Height of a block.
+    :returns: Generator over a set of blocks.
+
+    """
+    parent_switch_block = parent_block = verifier.verify_switch_block(block)
+    while block is not None:
+        try:
+            block: Block = verifier.verify_block(
+                await network.get_block(parent_block.height + 1),
+                parent_block,
+                parent_switch_block,
+            )
+        except NodeRpcProxyError as err:
+            print(err)
+            # TODO: be more specifc
+            return
+        else:
+            yield block
+            parent_block: Block = block
+            if block.is_switch:
+                parent_switch_block = block
