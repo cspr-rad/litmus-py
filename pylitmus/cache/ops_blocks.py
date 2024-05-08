@@ -16,7 +16,7 @@ class _COLLECTIONS(enum.Enum):
     """Enumeration over set of partition collection.
     
     """
-    TRUSTED = "trusted"
+    BLOCKS = "block"
 
 
 @cache_op(_PARTITION, StoreOperation.SET_ONE)
@@ -28,16 +28,16 @@ def set_verified_block(data: Block) -> Entity:
     :returns: Cache entity.
 
     """
-    key: EntityKey = EntityKey.create(
-        paths=[
-            _COLLECTIONS.TRUSTED.value,
-        ],
-        names=[
-            data.hash.hex()
-        ]
-    )
-
     return Entity(
-        key=key.key,
+        key=EntityKey.create(
+            paths=[
+                _COLLECTIONS.BLOCKS.value,
+            ],
+            names=[
+                str(data.header.height).zfill(12),
+                data.hash.hex(),
+                data.header.parent_hash.hex(),
+            ]
+        ).key,
         data=data.hash.hex()
         )

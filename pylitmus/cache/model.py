@@ -4,6 +4,12 @@ import json
 import typing
 
 
+# Cache key separators.
+_SEPERATOR_NAME: str = " || "
+_SEPERATOR_PATH: str = " :: "
+_SEPERATOR_KEY: str = ":"
+
+
 @dataclasses.dataclass
 class Entity():
     """An item to be encached alongside it's key.
@@ -23,10 +29,10 @@ class EntityKey():
 
     @staticmethod
     def create(paths: typing.List[str], names: typing.List[str]) -> "EntityKey":
-        path = ":".join([str(i) for i in paths])
-        name = ".".join([str(i) for i in names])
+        path = _SEPERATOR_PATH.join([str(i) for i in paths])
+        name = _SEPERATOR_NAME.join([str(i) for i in names])
 
-        return EntityKey(f"{path}:{name}")
+        return EntityKey(f"{path}{_SEPERATOR_KEY}{name}")
 
 
 @dataclasses.dataclass
@@ -38,10 +44,10 @@ class CountDecrementKey(EntityKey):
 
     @staticmethod
     def create(paths: typing.List[str], names: typing.List[str], amount: int) -> EntityKey:
-        path = ":".join([str(i) for i in paths])
-        name = ".".join([str(i) for i in names])
+        path = _SEPERATOR_PATH.join([str(i) for i in paths])
+        name = _SEPERATOR_NAME.join([str(i) for i in names])
 
-        return CountDecrementKey(f"{path}:{name}", amount)
+        return CountDecrementKey(f"{path}{_SEPERATOR_KEY}{name}", amount)
 
 
 @dataclasses.dataclass
@@ -53,10 +59,10 @@ class CountIncrementKey(EntityKey):
 
     @staticmethod
     def create(paths: typing.List[str], names: typing.List[str], amount: int) -> EntityKey:
-        path = ":".join([str(i) for i in paths])
-        name = ".".join([str(i) for i in names])
+        path = _SEPERATOR_PATH.join([str(i) for i in paths])
+        name = _SEPERATOR_NAME.join([str(i) for i in names])
 
-        return CountIncrementKey(f"{path}:{name}", amount)
+        return CountIncrementKey(f"{path}{_SEPERATOR_KEY}{name}", amount)
 
 
 @dataclasses.dataclass
@@ -66,10 +72,9 @@ class SearchKey():
     """
     key: str
 
-
     @staticmethod
     def create(paths: typing.List[str], wildcard="*") -> "SearchKey":
-        path = ':'.join([str(i) for i in paths])
+        path = _SEPERATOR_PATH.join([str(i) for i in paths])
 
         return SearchKey(f"{path}{wildcard}")
 
