@@ -1,6 +1,6 @@
 import fakeredis
 
-from pylitmus.cache1.model import StorePartition
+from pylitmus.cache.model import StorePartition
 
 
 def get_store(_: StorePartition) -> fakeredis.FakeStrictRedis:

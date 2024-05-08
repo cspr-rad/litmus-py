@@ -1,6 +1,6 @@
 import redis
 
-from pylitmus.cache1.model import StorePartition
+from pylitmus.cache.model import StorePartition
 from pylitmus.utils import env
 
 

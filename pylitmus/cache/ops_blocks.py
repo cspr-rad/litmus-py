@@ -1,10 +1,10 @@
 import enum
 
-from pylitmus.cache1.model import Entity
-from pylitmus.cache1.model import EntityKey
-from pylitmus.cache1.model import StoreOperation
-from pylitmus.cache1.model import StorePartition
-from pylitmus.cache1.utils import cache_op
+from pylitmus.cache.model import Entity
+from pylitmus.cache.model import EntityKey
+from pylitmus.cache.model import StoreOperation
+from pylitmus.cache.model import StorePartition
+from pylitmus.cache.utils import cache_op
 from pylitmus.chain import Block
 
 

@@ -5,14 +5,14 @@ import time
 
 import redis
 
-from pylitmus.cache1.model import CountDecrementKey
-from pylitmus.cache1.model import CountIncrementKey
-from pylitmus.cache1.model import Entity
-from pylitmus.cache1.model import EntityKey
-from pylitmus.cache1.model import StoreOperation
-from pylitmus.cache1.model import StorePartition
-from pylitmus.cache1.model import SearchKey
-from pylitmus.cache1 import stores
+from pylitmus.cache.model import CountDecrementKey
+from pylitmus.cache.model import CountIncrementKey
+from pylitmus.cache.model import Entity
+from pylitmus.cache.model import EntityKey
+from pylitmus.cache.model import StoreOperation
+from pylitmus.cache.model import StorePartition
+from pylitmus.cache.model import SearchKey
+from pylitmus.cache import stores
 
 
 # from stests.core.utils import encoder

@@ -1,10 +1,6 @@
-import pycspr
-
 from pylitmus import cache
-from pylitmus import cache1
 from pylitmus import network
 from pylitmus import chain
-from pylitmus import verifier
 
 
 async def init_from_trusted_block_height(block_height: chain.BlockHeight):
@@ -29,7 +25,7 @@ async def init_from_trusted_block_hash(block_hash: chain.BlockHash):
 
     """
     # Initialise trusted cache.
-    await cache.init()
+    # await cache.init()
 
     # Descend chain -> most recent valid switch block.
     async for block in chain.yield_until_previous_switch_block(block_hash):
@@ -37,7 +33,7 @@ async def init_from_trusted_block_hash(block_hash: chain.BlockHash):
 
     # Ascend chain -> tip.
     async for block in chain.yield_until_tip(block):
-        cache1.blocks.set_verified_block(block)
+        cache.blocks.set_verified_block(block)
 
     # Bind to SSE event channel and keep cache fresh.
     # TODO

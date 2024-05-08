@@ -1,8 +1,8 @@
 import enum
 
-from pylitmus.cache1 import store_redis
-from pylitmus.cache1 import store_redis_fake
-from pylitmus.cache1.model import StorePartition
+from pylitmus.cache import store_redis
+from pylitmus.cache import store_redis_fake
+from pylitmus.cache.model import StorePartition
 from pylitmus.utils import env
 
 
