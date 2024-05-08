@@ -1,57 +1,77 @@
+import dataclasses
 import enum
 import json
 import typing
 
 
-class CacheItem():
+@dataclasses.dataclass
+class Entity():
     """An item to be encached alongside it's key.
     
     """
-    def __init__(self, item_key: CacheItemKey, data: typing.Any, expiration: int = None):
-        self.key = item_key.key
-        self.data = data
-        self.expiration = expiration
-
-    @property
-    def data_as_json(self):
-        return json.dumps(encoder.encode(self.data), indent=4)
+    key: str
+    data: typing.Any
+    expiration: int = None
 
 
-class CacheItemKey():
+@dataclasses.dataclass
+class EntityKey():
     """A key of an encached item.
     
     """
-    def __init__(self, paths: typing.List[str], names: typing.List[str]):
+    key: str
+
+    @staticmethod
+    def create(paths: typing.List[str], names: typing.List[str]) -> "EntityKey":
         path = ":".join([str(i) for i in paths])
         name = ".".join([str(i) for i in names])
-        self.key = f"{path}:{name}"
+
+        return EntityKey(f"{path}:{name}")
 
 
-class CountDecrementKey(CacheItemKey):
+@dataclasses.dataclass
+class CountDecrementKey(EntityKey):
     """A key used to decrement a counter.
     
     """
-    def __init__(self, paths: typing.List[str], names: typing.List[str], amount: int):
-        super().__init__(paths, names)
-        self.amount = amount
+    amount: int
+
+    @staticmethod
+    def create(paths: typing.List[str], names: typing.List[str], amount: int) -> EntityKey:
+        path = ":".join([str(i) for i in paths])
+        name = ".".join([str(i) for i in names])
+
+        return CountDecrementKey(f"{path}:{name}", amount)
 
 
-class CountIncrementKey(CacheItemKey):
+@dataclasses.dataclass
+class CountIncrementKey(EntityKey):
     """A key used to increment a counter.
     
     """
-    def __init__(self, paths: typing.List[str], names: typing.List[str], amount: int):
-        super().__init__(paths, names)
-        self.amount = amount
-        
+    amount: int
 
-class CacheSearchKey():
-    """A key used to perform a cache search.
+    @staticmethod
+    def create(paths: typing.List[str], names: typing.List[str], amount: int) -> EntityKey:
+        path = ":".join([str(i) for i in paths])
+        name = ".".join([str(i) for i in names])
+
+        return CountIncrementKey(f"{path}:{name}", amount)
+
+
+@dataclasses.dataclass
+class SearchKey():
+    """A key used to increment a counter.
     
     """
-    def __init__(self, paths: typing.List[str], wildcard="*"):
+    key: str
+
+
+    @staticmethod
+    def create(paths: typing.List[str], wildcard="*") -> "SearchKey":
         path = ':'.join([str(i) for i in paths])
-        self.key = f"{path}{wildcard}"
+
+        return SearchKey(f"{path}{wildcard}")
 
 
 class StoreOperation(enum.Enum):
@@ -100,7 +120,7 @@ class StorePartition(enum.Enum):
     
     """
     # Block data.
-    BLOCK = enum.auto()
+    BLOCKS = enum.auto()
 
     # Merkle proof data.
     MERKLE_PROOFS = enum.auto()
