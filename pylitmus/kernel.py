@@ -33,7 +33,7 @@ async def init_from_trusted_block_hash(block_hash: chain.BlockHash):
 
     # Ascend chain -> tip.
     async for block in chain.yield_until_tip(block):
-        cache.blocks.set_verified_block(block)
+        cache.blocks.set_block(block)
 
     # Bind to SSE event channel and keep cache fresh.
     # TODO
