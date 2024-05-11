@@ -1,6 +1,6 @@
 import enum
 
-from pylitmus.cache.model import EntityKey
+from pylitmus.cache.model import CacheKey
 from pylitmus.chain import Block
 
 
@@ -11,8 +11,8 @@ class _COLLECTIONS(enum.Enum):
     BLOCKS = "block"
 
 
-def block_from_self(block: Block) -> EntityKey:
-    return EntityKey.create(
+def block_from_self(block: Block) -> CacheKey:
+    return CacheKey.create(
         [
             _COLLECTIONS.BLOCKS.value,
         ],
@@ -36,7 +36,7 @@ def block_from_self(block: Block) -> EntityKey:
 
 
 def block_from_hash(block_hash: bytes) -> str:
-    return EntityKey.create(
+    return CacheKey.create(
         [
             _COLLECTIONS.BLOCKS.value,
         ],
@@ -60,7 +60,7 @@ def block_from_hash(block_hash: bytes) -> str:
 
 
 def block_from_height(block_height: int) -> str:
-    return EntityKey.create(
+    return CacheKey.create(
         [
             _COLLECTIONS.BLOCKS.value,
         ],
@@ -84,7 +84,7 @@ def block_from_height(block_height: int) -> str:
 
 
 def block_from_parent_hash(parent_hash: bytes) -> str:
-    return EntityKey.create(
+    return CacheKey.create(
         [
             _COLLECTIONS.BLOCKS.value,
         ],
@@ -108,7 +108,7 @@ def block_from_parent_hash(parent_hash: bytes) -> str:
 
 
 def blocks_from_era(era_id: int) -> str:
-    return EntityKey.create(
+    return CacheKey.create(
         [
             _COLLECTIONS.BLOCKS.value,
         ],
@@ -132,7 +132,7 @@ def blocks_from_era(era_id: int) -> str:
 
 
 def count_of_blocks(era_id: int = None) -> str:
-    return EntityKey.create(
+    return CacheKey.create(
         [
             _COLLECTIONS.BLOCKS.value,
         ],

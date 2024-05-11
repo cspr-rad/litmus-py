@@ -1,9 +1,10 @@
 import time
 import typing
 
+from pylitmus.cache.model import Backend
 from pylitmus.cache.model import StorePartition
-from pylitmus.cache.stores.redis import factory
-from pylitmus.cache.stores.types import Backend
+from pylitmus.cache.stores.redis.client import get_client
+
 
 # Max. number of times an operation will be tried.
 _MAX_OP_ATTEMPTS: int = 5
@@ -13,14 +14,14 @@ class Proxy():
     """Proxy for interacting with a redis server.
     
     """
-    def __init__(self, backend_type: Backend, partition: StorePartition):
+    def __init__(self, backend: Backend, partition: StorePartition):
         """Instance constructor.
         
-        :params backend_type: Type if store backend to be utilised.
-        :params store: Cache store to be utilised.
+        :params backend: Type if store backend to be utilised.
+        :params partition: Store partition.
     
         """
-        self.client = factory.get_client(backend_type, partition)
+        self.client = get_client(backend, partition)
 
     def __enter__(self):
         """Instance as context manager entry."""

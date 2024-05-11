@@ -1,9 +1,9 @@
 import fakeredis
 import redis
 
+from pylitmus.cache import env
+from pylitmus.cache.model import Backend
 from pylitmus.cache.model import StorePartition
-from pylitmus.cache.stores.redis import env
-from pylitmus.cache.stores.types import Backend
 
 
 # Map: store partition <-> db offset.

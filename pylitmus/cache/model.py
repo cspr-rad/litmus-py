@@ -10,22 +10,7 @@ _SEPERATOR_PATH: str = "."
 _SEPERATOR_KEY: str = ":"
 
 
-@dataclasses.dataclass
-class Entity():
-    """An item to be encached alongside it's key.
-    
-    """
-    # Cache key.
-    key: str
-
-    # Data to be encached.
-    data: typing.Any
-
-    # Expiration in milliseconds.
-    expiration: int = None
-
-
-class EntityKey():
+class CacheKey():
     """A key of an encached item.
     
     """
@@ -37,42 +22,12 @@ class EntityKey():
         return f"{path}{_SEPERATOR_KEY}{name}"
 
 
-@dataclasses.dataclass
-class CounterKey():
-    """A key used to manage a counter.
+class Backend(enum.Enum):
+    """Enumeration over set of supported backends.
     
     """
-    # Cache key.
-    key: str
-
-    # Increment ordinal.
-    amount: int
-
-
-@dataclasses.dataclass
-class CountDecrementKey(CounterKey):
-    """A key used to decrement a counter.
-    
-    """
-    @staticmethod
-    def create(paths: typing.List[str], names: typing.List[str], amount: int) -> "CountDecrementKey":
-        path = _SEPERATOR_PATH.join([str(i) for i in paths])
-        name = _SEPERATOR_NAME.join([str(i) for i in names])
-
-        return CountDecrementKey(f"{path}{_SEPERATOR_KEY}{name}", amount)
-
-
-@dataclasses.dataclass
-class CountIncrementKey(CounterKey):
-    """A key used to increment a counter.
-    
-    """
-    @staticmethod
-    def create(paths: typing.List[str], names: typing.List[str], amount: int) -> "CountIncrementKey":
-        path = _SEPERATOR_PATH.join([str(i) for i in paths])
-        name = _SEPERATOR_NAME.join([str(i) for i in names])
-
-        return CountIncrementKey(f"{path}{_SEPERATOR_KEY}{name}", amount)
+    REDIS = "REDIS"
+    REDIS_FAKE = "REDIS_FAKE"
 
 
 class StorePartition(enum.Enum):
