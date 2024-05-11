@@ -24,16 +24,10 @@ async def init_from_trusted_block_hash(block_hash: chain.BlockHash):
     :param block_hash: Hash of trusted block.
 
     """
-    # Initialise trusted cache.
-    # await cache.init()
-
-    # Descend chain -> most recent valid switch block.
-    async for block in chain.yield_until_previous_switch_block(block_hash):
+    # Descend to most recent valid switch block.
+    async for block in chain.descend_until_switch_block(block_hash):
         pass
 
-    # Ascend chain -> tip.
-    async for block in chain.yield_until_tip(block):
+    # Ascend to tip.
+    async for block in chain.ascend_until_tip(block):
         cache.blocks.set_block(block)
-
-    # Bind to SSE event channel and keep cache fresh.
-    # TODO
