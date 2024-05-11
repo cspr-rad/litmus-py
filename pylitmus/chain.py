@@ -5,7 +5,6 @@ from pycspr.types.node import Block
 from pycspr.types.node import BlockHash
 from pycspr.types.node import BlockHeight
 from pycspr.types.node import BlockID
-from pycspr.types.node import EraID
 
 from pylitmus import network
 from pylitmus import verifier

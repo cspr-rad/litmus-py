@@ -90,5 +90,5 @@ def set_block(block: Block) -> str:
     with get_store(StorePartition.BLOCKS) as store:
         return store.set_one_singleton(
             keys.from_self(block),
-            block
+            json.dumps(pycspr.to_json(block)),
         )

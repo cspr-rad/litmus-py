@@ -11,10 +11,11 @@ from pylitmus.node import Node
 _NODES: typing.List[Node] = []
 
 
-async def get_block(block_id: BlockID) -> Block:
+async def get_block(block_id: BlockID, node_id: int = None) -> Block:
     """Queries a node for a block.
     
     :param block_id: Identifier of a trusted block.
+    :param node_id: Identifier of a registered node.
     :returns: A matched block.
     
     """
@@ -42,7 +43,7 @@ def _get_node(node_id: int = None) -> Node:
     """
     if not _NODES:
         raise ValueError("Invalid node set.")
-    if node_id is not None and node_id >= len(_NODES):
+    if node_id is not None and (node_id < 0 or node_id >= len(_NODES) - 1):
         raise ValueError("Invalid node identifier.")
 
     return random.choice(_NODES) if node_id is None else _NODES[node_id]

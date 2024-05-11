@@ -1,6 +1,6 @@
 from pylitmus import cache
-from pylitmus import network
 from pylitmus import chain
+from pylitmus import network
 
 
 async def init_from_trusted_block_height(block_height: chain.BlockHeight):
