@@ -3,7 +3,7 @@ import json
 
 import pycspr
 
-from pylitmus.cache import keys
+from pylitmus.cache.keys import blocks as keys
 from pylitmus.cache.model import StorePartition
 from pylitmus.cache.stores import get_store
 from pylitmus.chain import Block
@@ -31,7 +31,7 @@ def get_count_of_blocks(era_id: int = None) -> int:
     """
     with get_store(StorePartition.BLOCKS) as store:
         return store.get_count(
-            keys.count_of_blocks(era_id)
+            keys.count_of_self(era_id)
         )
 
 
@@ -44,9 +44,9 @@ def get_block(block_id: BlockID) -> bytes:
     """
     def _get_key():
         if isinstance(block_id, bytes):
-            return keys.block_from_hash(block_id)
+            return keys.from_hash(block_id)
         elif isinstance(block_id, int):
-            return keys.block_from_height(block_id)
+            return keys.from_height(block_id)
         else:
             raise ValueError("Unrecognized block id")
     
@@ -63,7 +63,7 @@ def get_block_by_parent_hash(block_id: BlockHash) -> bytes:
     """
     with get_store(StorePartition.BLOCKS) as store:
         return store.get_one_from_many(
-            keys.block_from_parent_hash(block_id)
+            keys.from_parent_hash(block_id)
         )
 
 
@@ -76,7 +76,7 @@ def get_blocks_by_era(era_id: int) -> bytes:
     """
     with get_store(StorePartition.BLOCKS) as store:
         return store.get_many(
-            keys.blocks_from_era(era_id)
+            keys.from_era(era_id)
         )
 
 
@@ -89,6 +89,6 @@ def set_block(block: Block) -> str:
     """
     with get_store(StorePartition.BLOCKS) as store:
         return store.set_one_singleton(
-            keys.block_from_self(block),
+            keys.from_self(block),
             block
         )

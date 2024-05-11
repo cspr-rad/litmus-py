@@ -1,7 +1,7 @@
 import fakeredis
 import redis
 
-from pylitmus.cache import env
+from pylitmus.cache import evars
 from pylitmus.cache.model import Backend
 from pylitmus.cache.model import StorePartition
 
@@ -23,9 +23,9 @@ def get_client(backend: Backend, partition: StorePartition):
     """ 
     if backend == Backend.REDIS:
         return redis.Redis(
-            db=env.REDIS_DB + PARTITION_OFFSET[partition],
-            host=env.REDIS_HOST,
-            port=env.REDIS_PORT,
+            db=evars.REDIS_DB + PARTITION_OFFSET[partition],
+            host=evars.REDIS_HOST,
+            port=evars.REDIS_PORT,
         )
 
     elif backend == Backend.REDIS_FAKE:

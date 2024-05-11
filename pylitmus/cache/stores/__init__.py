@@ -2,7 +2,7 @@ import enum
 
 from pylitmus.cache.model import Backend
 from pylitmus.cache.model import StorePartition
-from pylitmus.cache.env import BACKEND
+from pylitmus.cache.evars import BACKEND
 from pylitmus.cache.stores.redis.proxy import Proxy as RedisProxy
 
 
