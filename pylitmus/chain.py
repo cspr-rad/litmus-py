@@ -30,15 +30,22 @@ async def descend_until_switch_block(block_id: BlockID) -> typing.Generator:
     yield verifier.verify_block_at_era_end(block)
 
 
-async def ascend_until_tip(switch_block: Block) -> typing.Generator:
+async def ascend_until_tip(
+    block: Block,
+    parent_block: Block,
+    switch_block: Block
+) -> typing.Generator:
     """Yields future blocks until chain tip is reached.
     
     :param block_height: Height of a block.
     :returns: Generator over a set of blocks.
 
     """
-    parent_block = verifier.verify_block_at_era_end(switch_block)
-    while block is not None:
+    if block is None and parent_block is None:
+        block = parent_block = verifier.verify_block_at_era_end(switch_block)
+
+    chain_height: int = await network.get_chain_height()
+    while block.header.height < chain_height:
         try:
             block: Block = verifier.verify_block(
                 await network.get_block(parent_block.height + 1),
@@ -47,10 +54,14 @@ async def ascend_until_tip(switch_block: Block) -> typing.Generator:
             )
         except NodeRpcProxyError as err:
             print(err)
-            # TODO: be more specifc
+            # TODO: define exception policy/handling.
             return
         else:
             yield block
             parent_block: Block = block
             if block.is_switch:
                 switch_block = block
+
+    if block.header.height < await network.get_chain_height():
+        async for block in ascend_until_tip(block, parent_block, switch_block):
+            yield block

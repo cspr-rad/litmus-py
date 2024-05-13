@@ -15,21 +15,30 @@ async def get_block(block_id: BlockID, node_id: int = None) -> Block:
     """Queries a node for a block.
     
     :param block_id: Identifier of a trusted block.
-    :param node_id: Identifier of a registered node.
     :returns: A matched block.
     
     """
-    return await get_node(node_id).get_block(block_id)
+    return await get_node().get_block(block_id)
 
 
-async def get_block_range(node_id: int = None) -> typing.Tuple[int, int]:
+async def get_block_range() -> typing.Tuple[int, int]:
     """Queries a node for it's available block range.
     
     :param block_hash: Hash of a trusted block.
     :returns: A matched block.
     
     """
-    return await get_node(node_id).get_block_range()
+    return await get_node().get_block_range()
+
+
+async def get_chain_height() -> int:
+    """Queries a node for it's block height.
+    
+    :returns: A matched block.
+    
+    """
+    print(123456)
+    return (await get_block_range())[1]
 
 
 def get_node(node_id: int = None) -> Node:
