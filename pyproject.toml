@@ -24,6 +24,8 @@ repository = "https://github.com/cspr-rad/litmus-py"
 python = "^3.12"
 fakeredis = "^2.22.0"
 redis = "^5.0.4"
+dramatiq = {version = "^1.17.0", extras = ["=redis", "=watch"]}
+tornado = "^6.4"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.0.0"

@@ -80,6 +80,19 @@ def get_blocks_by_era(era_id: int) -> bytes:
         )
 
 
+def get_era_switch_block(era_id: int) -> bytes:
+    """Decaches a verified switch block.
+
+    :param era_id: Era identifier.
+    :returns: Verified switch block information.
+
+    """
+    with get_store(StorePartition.BLOCKS) as store:
+        return store.get_many(
+            keys.from_era_at_switch(era_id)
+        )
+
+
 def set_block(block: Block) -> str:
     """Encaches a verified block.
 

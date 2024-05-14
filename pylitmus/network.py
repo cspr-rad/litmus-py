@@ -37,7 +37,6 @@ async def get_chain_height() -> int:
     :returns: A matched block.
     
     """
-    print(123456)
     return (await get_block_range())[1]
 
 
