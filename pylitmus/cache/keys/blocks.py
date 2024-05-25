@@ -17,12 +17,12 @@ def from_self(block: Block) -> str:
             _COLLECTIONS.BLOCKS.value,
         ],
         [
-            # Block type.
-            int(block.is_switch),
             # Chain era.
             str(block.header.era_id).zfill(12),
             # Block height.
             str(block.header.height).zfill(12),
+            # Block type.
+            int(block.is_switch),
             # Block hash.
             block.hash.hex(),
             # Block parent hash.
@@ -41,11 +41,11 @@ def from_hash(block_hash: bytes) -> str:
             _COLLECTIONS.BLOCKS.value,
         ],
         [
-            # Block type.
-            "*",
             # Chain era.
             "*",
             # Block height.
+            "*",
+            # Block type.
             "*",
             # Block hash.
             block_hash.hex(),
@@ -65,12 +65,12 @@ def from_height(block_height: int) -> str:
             _COLLECTIONS.BLOCKS.value,
         ],
         [
-            # Block type.
-            "*",
             # Chain era.
             "*",
             # Block height.
             str(block_height).zfill(12),
+            # Block type.
+            "*",
             # Block hash.
             "*",
             # Block parent hash.
@@ -89,11 +89,11 @@ def from_parent_hash(parent_hash: bytes) -> str:
             _COLLECTIONS.BLOCKS.value,
         ],
         [
-            # Block type.
-            "*",
             # Chain era.
             "*",
             # Block height.
+            "*",
+            # Block type.
             "*",
             # Block hash.
             "*",
@@ -113,11 +113,11 @@ def from_era(era_id: int) -> str:
             _COLLECTIONS.BLOCKS.value,
         ],
         [
-            # Block type.
-            "*",
             # Chain era.
             str(era_id).zfill(12),
             # Block height.
+            "*",
+            # Block type.
             "*",
             # Block hash.
             "*",
@@ -137,12 +137,12 @@ def from_era_at_switch(era_id: int) -> str:
             _COLLECTIONS.BLOCKS.value,
         ],
         [
-            # Block type.
-            "1",
             # Chain era.
             str(era_id).zfill(12),
             # Block height.
             "*",
+            # Block type.
+            "1",
             # Block hash.
             "*",
             # Block parent hash.
@@ -161,11 +161,11 @@ def count_of_self(era_id: int = None) -> str:
             _COLLECTIONS.BLOCKS.value,
         ],
         [
-            # Block type.
-            "*",
             # Chain era.
             "*" if era_id is None else str(era_id).zfill(12),
             # Block height.
+            "*",
+            # Block type.
             "*",
             # Block hash.
             "*",
