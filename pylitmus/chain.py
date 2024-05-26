@@ -10,7 +10,7 @@ from pylitmus import network
 from pylitmus import verifier
 
 
-async def descend_until_switch_block(block_id: BlockID) -> typing.Generator:
+async def get_previous_era_switch_block(block_id: BlockID) -> Block:
     """Yields verified historical blocks until a switch block is reached.
     
     :param block_hash: Hash of a trusted block.
@@ -20,14 +20,12 @@ async def descend_until_switch_block(block_id: BlockID) -> typing.Generator:
     block: Block = verifier.verify_block(
         await network.get_block(block_id)
     )
-
     while block.is_switch is False:
-        yield block
         block: Block = verifier.verify_block(
             await network.get_block(block.header.parent_hash)
         )
 
-    yield verifier.verify_block_at_era_end(block)
+    return verifier.verify_block_at_era_end(block)
 
 
 async def ascend_until_tip(

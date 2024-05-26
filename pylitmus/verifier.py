@@ -1,6 +1,21 @@
+import enum
+
 import pycspr
 
 from pylitmus import chain
+
+
+# class InvalidBlockExceptionType(enum.Enum):
+#     """Enumeration over set of invalid block exception types.
+    
+#     """
+#     ExpectedSwitchBlock = enum.auto()
+#     NotFound = enum.auto()
+#     InvalidFinalitySignature = enum.auto()
+#     InvalidHash = enum.auto()
+#     InvalidParent = enum.auto()
+#     InvalidProposer = enum.auto()
+#     InsufficientFinalitySignatureWeight = enum.auto()
 
 
 def verify_block(
