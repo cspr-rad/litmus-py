@@ -18,7 +18,10 @@ async def get_block(block_id: BlockID, node_id: int = None) -> Block:
     :returns: A matched block.
     
     """
-    return await get_node().get_block(block_id)
+    node: Node = _get_node()
+
+    # TODO: handle proxy errors.
+    return await node.get_block(block_id)
 
 
 async def get_block_range() -> typing.Tuple[int, int]:
@@ -28,7 +31,9 @@ async def get_block_range() -> typing.Tuple[int, int]:
     :returns: A matched block.
     
     """
-    return await get_node().get_block_range()
+    node: Node = _get_node()
+
+    return await node.get_block_range()
 
 
 async def get_chain_height() -> int:
@@ -38,18 +43,6 @@ async def get_chain_height() -> int:
     
     """
     return (await get_block_range())[1]
-
-
-def get_node(node_id: int = None) -> Node:
-    """Returns either a specific or a random node proxy.
-    
-    """
-    if not _NODES:
-        raise ValueError("Invalid node set.")
-    if node_id is not None and (node_id < 0 or node_id >= len(_NODES) - 1):
-        raise ValueError("Invalid node identifier.")
-
-    return random.choice(_NODES) if node_id is None else _NODES[node_id]
 
 
 def register_node(host: str, rpc_port: int, sse_port: int):
@@ -63,3 +56,13 @@ def register_node(host: str, rpc_port: int, sse_port: int):
     _NODES.append(
         Node(host, rpc_port, sse_port)
         )
+
+
+def _get_node() -> Node:
+    """Returns a random node proxy.
+    
+    """
+    if not _NODES:
+        raise ValueError("Invalid node set.")
+
+    return random.choice(_NODES)

@@ -2,13 +2,13 @@ import enum
 import json
 
 import pycspr
+from pycspr.types.node import Block
+from pycspr.types.node import BlockHash
+from pycspr.types.node import BlockID
 
 from pylitmus.cache.keys import blocks as keys
 from pylitmus.cache.model import StorePartition
 from pylitmus.cache.stores import get_store
-from pylitmus.chain import Block
-from pylitmus.chain import BlockHash
-from pylitmus.chain import BlockID
 
 
 # Cache partition.

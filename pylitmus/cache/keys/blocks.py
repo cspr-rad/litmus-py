@@ -1,7 +1,8 @@
 import enum
 
+from pycspr.types.node import Block
+
 from pylitmus.cache.keys.utils import get_key
-from pylitmus.chain import Block
 
 
 class _COLLECTIONS(enum.Enum):

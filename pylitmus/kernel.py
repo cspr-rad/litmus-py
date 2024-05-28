@@ -1,17 +1,18 @@
 from pycspr.types.node import Block
+from pycspr.types.node import BlockHash
 
 from pylitmus import cache
 from pylitmus import chain
 
 
-async def init_from_trusted_block_hash(block_hash: chain.BlockHash):
+async def init_from_trusted_block_hash(block_hash: BlockHash):
     """Initialises light client from a trusted block hash.
 
-    :param block_hash: Hash of trusted block.
+    :param block_hash: Hash of a trusted block.
 
     """
     # Descend -> switch block.
-    block: Block = chain.get_previous_era_switch_block(block_hash):
+    block: Block = await chain.get_switch_block_of_previous_era(block_hash)
 
     # Ascend -> tip.
     async for block in chain.ascend_until_tip(None, None, block):
