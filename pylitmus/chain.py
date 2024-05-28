@@ -54,7 +54,6 @@ async def ascend_until_tip(
         try:
             block: Block = verifier.validate_block(
                 await network.get_block(parent_block.height + 1),
-                parent_block,
                 switch_block,
             )
         except NodeRpcProxyError as err:

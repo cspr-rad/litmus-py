@@ -12,9 +12,9 @@ class InvalidBlockExceptionType(enum.Enum):
     """
     ExpectedSwitchBlock = enum.auto()
     NotFound = enum.auto()
+    InvalidEra = enum.auto()
     InvalidFinalitySignature = enum.auto()
     InvalidHash = enum.auto()
-    InvalidParent = enum.auto()
     InvalidProposer = enum.auto()
     InsufficientFinalitySignatureWeight = enum.auto()
 
@@ -30,46 +30,38 @@ class InvalidBlockException(Exception):
 
 def validate_block(
     block: Block,
-    parent_block: Block = None,
     switch_block_of_previous_era: Block = None,
     ) -> Block:
     """Validates a block.
 
     :block: A block to be validated.
-    :parent_block: The block's parent.
-    :switch_block_of_previous_era: The switch block of the previous consensus era.
+    :switch_block_of_previous_era: The switch block of previous consensus era.
     :returns: The block if considered valid, otherwise raises exception.
 
     """
     # TODO: extend input parameters -> blockID: if hash then ina  descent, if height then ascending & switch block must be available 
     
-    # BL-000: Verify block was sucessfully downloaded.
+    # BL-000: Exception if block was not downloaded.
     if block is None:
         raise InvalidBlockException(InvalidBlockExceptionType.NotFound)
 
-    # BL-001: Verify block hash of parent.
-    # TODO: remove
-    if parent_block is not None:
-        if parent_block.hash != block.header.parent_hash:
-            raise InvalidBlockException(InvalidBlockExceptionType.InvalidParent)
-
-    # BL-002: Verify block hash.
+    # BL-001: Exception if recomputed block hash is not equal to actual block hash.
     if block.hash != factory.create_digest_of_block(block.header):
         pass
         # raise InvalidBlockException(InvalidBlockExceptionType.InvalidHash)
 
-    # Rule 4: Verify proposer is a signatory.
-    # TODO: remove not absolutely necessary
-    if block.body.proposer not in block.signatories:
-        raise InvalidBlockException(InvalidBlockExceptionType.InvalidProposer)
-    
-    # Rule 5: Verify block signatories are era signatories.
+    # BL-002: Exception if switch block is not from a previous era.
+    if switch_block_of_previous_era is not None:
+        if switch_block_of_previous_era.header.era_id != block.header.era_id - 1:
+            raise InvalidBlockException(InvalidBlockExceptionType.InvalidEra)
+
+    # BL-003: Exception if a block signatory is not an era signatory.
     if switch_block_of_previous_era is not None:
         for signatory in block.signatories:
             if signatory not in switch_block_of_previous_era.header.era_end.next_era_signatories:
                 raise InvalidBlockException(InvalidBlockExceptionType.InvalidProposer)
 
-    # Rule 6: Verify finality signature authenticity.
+    # BL-004: Exception if a finality signature is invalid.
     block_digest_for_finality_signature: bytes = \
         factory.create_digest_of_block_for_finality_signature(block)
     for proof in block.proofs:
@@ -81,22 +73,25 @@ def validate_block(
         ):
             raise InvalidBlockException(InvalidBlockExceptionType.InvalidFinalitySignature)
 
-    # Rule 6: Verify finality signature finality weight.
+    # BL-005: Exception if weight of finality signatures is insufficient.
     if switch_block_of_previous_era is not None:
-        validate_block_finality_signature_weight(block, switch_block_of_previous_era)
+        proven_weight: int = \
+            block.get_finality_signature_weight(switch_block_of_previous_era)
+        required_weight: int = \
+            switch_block_of_previous_era.validator_weight_required_for_finality_in_next_era
+        if proven_weight < required_weight:
+            raise InvalidBlockException(InvalidBlockExceptionType.InsufficientFinalitySignatureWeight)
 
     return block
 
 
 def validate_switch_block(
     block: Block,
-    parent_block: Block = None,
     switch_block_of_previous_era: Block = None,
     ) -> Block:
     """Validates last block in an era of consensus.
 
     :block: A block to be validated.
-    :parent_block: The block's parent.
     :switch_block_of_previous_era: The switch block of the previous consensus era.
     :returns: The block if considered valid, otherwise raises exception.
 
@@ -110,16 +105,4 @@ def validate_switch_block(
         raise InvalidBlockException(InvalidBlockExceptionType.ExpectedSwitchBlock)
 
     # Rule 3: Apply standard block validation rules.
-    return validate_block(block, parent_block, switch_block_of_previous_era)
-
-
-def validate_block_finality_signature_weight(
-    block: Block,
-    switch_block_of_previous_era: Block = None,        
-):
-    proven_weight: int = \
-        block.get_finality_signature_weight(switch_block_of_previous_era)
-    required_weight: int = \
-        switch_block_of_previous_era.validator_weight_required_for_finality_in_next_era
-    if proven_weight < required_weight:
-        raise InvalidBlockException(InvalidBlockExceptionType.InsufficientFinalitySignatureWeight)
+    return validate_block(block, switch_block_of_previous_era)
