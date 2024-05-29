@@ -4,8 +4,8 @@ from pycspr import NodeRpcClient
 from pycspr import NodeRpcConnectionInfo
 from pycspr import NodeSseClient
 from pycspr import NodeSseConnectionInfo
-from pycspr.types.node import Block
-from pycspr.types.node import BlockHash
+from pylitmus.types import Block
+from pylitmus.types import BlockHash
 
 
 class Node():

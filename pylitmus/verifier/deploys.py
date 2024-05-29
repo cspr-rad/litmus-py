@@ -2,7 +2,8 @@ import enum
 
 from pycspr import crypto
 from pycspr import factory
-from pycspr.types.node import Deploy
+
+from pylitmus.types import Deploy
 
 
 class InvalidDeployExceptionType(enum.Enum):

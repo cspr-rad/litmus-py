@@ -2,7 +2,7 @@ import time
 import typing
 
 from pylitmus.cache.model import Backend
-from pylitmus.cache.model import StorePartition
+from pylitmus.cache.model import Partition
 from pylitmus.cache.stores.redis.client import get_client
 
 
@@ -14,7 +14,7 @@ class Proxy():
     """Proxy for interacting with a redis server.
     
     """
-    def __init__(self, backend: Backend, partition: StorePartition):
+    def __init__(self, backend: Backend, partition: Partition):
         """Instance constructor.
         
         :params backend: Type if store backend to be utilised.

@@ -1,5 +1,7 @@
 import typing
 
+from pylitmus.cache.model import Key
+
 
 # Key separators.
 _SEPERATOR_NAME: str = " || "
@@ -7,7 +9,7 @@ _SEPERATOR_PATH: str = "."
 _SEPERATOR_KEY: str = ":"
 
 
-def get_key(paths: typing.List[str], names: typing.List[str]) -> str:
+def get_key(paths: typing.List[str], names: typing.List[str]) -> Key:
     """Returns a formatted cache key.
     
     :params paths: Set of cache entity paths.

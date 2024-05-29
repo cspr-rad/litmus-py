@@ -1,11 +1,11 @@
 import typing
 
 from pycspr import NodeRpcProxyError
-from pycspr.types.node import Block
-from pycspr.types.node import BlockHash
 
 from pylitmus import network
 from pylitmus import verifier
+from pylitmus.types import Block
+from pylitmus.types import BlockHash
 
 
 async def get_switch_block_of_previous_era(block_hash: BlockHash) -> Block:

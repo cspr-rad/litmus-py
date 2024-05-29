@@ -2,8 +2,9 @@ import enum
 
 from pycspr import crypto
 from pycspr import factory
-from pycspr.types.node import Block
-from pycspr.types.node import Weight
+
+from pylitmus.types import Block
+from pylitmus.types import Weight
 
 
 class InvalidBlockExceptionType(enum.Enum):
@@ -75,9 +76,9 @@ def validate_block(
 
     # BL-005: Exception if weight of finality signatures is insufficient.
     if switch_block_of_previous_era is not None:
-        proven_weight: int = \
+        proven_weight: Weight = \
             block.get_finality_signature_weight(switch_block_of_previous_era)
-        required_weight: int = \
+        required_weight: Weight = \
             switch_block_of_previous_era.validator_weight_required_for_finality_in_next_era
         if proven_weight < required_weight:
             raise InvalidBlockException(InvalidBlockExceptionType.InsufficientFinalitySignatureWeight)

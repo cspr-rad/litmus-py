@@ -1,4 +1,10 @@
 import enum
+import typing
+
+
+Key = typing.NewType(
+    "Entity cache key.", str
+    )
 
 
 class Backend(enum.Enum):
@@ -9,12 +15,18 @@ class Backend(enum.Enum):
     REDIS_FAKE = "REDIS_FAKE"
 
 
-class StorePartition(enum.Enum):
+class Partition(enum.Enum):
     """Enumeration over set of store partitions.
     
     """
-    # Block data.
+    # Verified block data.
     BLOCKS = enum.auto()
 
-    # Merkle proof data.
+    # Verified deploy data.
+    DEPLOYS = enum.auto()
+
+    # Verified era data.
+    ERAS = enum.auto()
+
+    # Verified state proofs.
     MERKLE_PROOFS = enum.auto()

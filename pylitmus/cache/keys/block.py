@@ -1,21 +1,16 @@
-import enum
-
-from pycspr.types.node import Block
-
 from pylitmus.cache.keys.utils import get_key
+from pylitmus.cache.model import Key
+from pylitmus.types import Block
 
 
-class _COLLECTIONS(enum.Enum):
-    """Enumeration over set of partition collection.
-    
-    """
-    BLOCKS = "block"
+# Cache collection to which entity will be written.
+_COLLECTION: str = "block"
 
 
-def from_self(block: Block) -> str:
+def from_self(block: Block) -> Key:
     return get_key(
         [
-            _COLLECTIONS.BLOCKS.value,
+            _COLLECTION,
         ],
         [
             # Chain era.
@@ -36,10 +31,10 @@ def from_self(block: Block) -> str:
     )
 
 
-def from_hash(block_hash: bytes) -> str:
+def from_hash(block_hash: bytes) -> Key:
     return get_key(
         [
-            _COLLECTIONS.BLOCKS.value,
+            _COLLECTION,
         ],
         [
             # Chain era.
@@ -60,10 +55,10 @@ def from_hash(block_hash: bytes) -> str:
     )
 
 
-def from_height(block_height: int) -> str:
+def from_height(block_height: int) -> Key:
     return get_key(
         [
-            _COLLECTIONS.BLOCKS.value,
+            _COLLECTION,
         ],
         [
             # Chain era.
@@ -84,10 +79,10 @@ def from_height(block_height: int) -> str:
     )
 
 
-def from_parent_hash(parent_hash: bytes) -> str:
+def from_parent_hash(parent_hash: bytes) -> Key:
     return get_key(
         [
-            _COLLECTIONS.BLOCKS.value,
+            _COLLECTION,
         ],
         [
             # Chain era.
@@ -108,10 +103,10 @@ def from_parent_hash(parent_hash: bytes) -> str:
     )
 
 
-def from_era(era_id: int) -> str:
+def from_era(era_id: int) -> Key:
     return get_key(
         [
-            _COLLECTIONS.BLOCKS.value,
+            _COLLECTION,
         ],
         [
             # Chain era.
@@ -132,10 +127,10 @@ def from_era(era_id: int) -> str:
     )
 
 
-def from_era_at_switch(era_id: int) -> str:
+def from_era_at_switch(era_id: int) -> Key:
     return get_key(
         [
-            _COLLECTIONS.BLOCKS.value,
+            _COLLECTION,
         ],
         [
             # Chain era.
@@ -156,10 +151,10 @@ def from_era_at_switch(era_id: int) -> str:
     )
 
 
-def count_of_self(era_id: int = None) -> str:
+def count_of_self(era_id: int = None) -> Key:
     return get_key(
         [
-            _COLLECTIONS.BLOCKS.value,
+            _COLLECTION,
         ],
         [
             # Chain era.

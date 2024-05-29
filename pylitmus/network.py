@@ -1,10 +1,9 @@
 import random
 import typing
 
-from pycspr.types.node import Block
-from pycspr.types.node import BlockID
-
 from pylitmus.node import Node
+from pylitmus.types import Block
+from pylitmus.types import BlockID
 
 
 # Set of registered nodes.
