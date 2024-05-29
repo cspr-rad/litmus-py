@@ -12,29 +12,29 @@ async def get_switch_block_of_previous_era(block_hash: BlockHash) -> Block:
     """Returns switch block of previous era.
     
     :param block_hash: Hash of a trusted block.
-    :returns: Generator over a set of historical blocks.
+    :returns: Switch block of previous era.
 
     """
-    # Pull & validate block matched by ID.
-    block: Block = verifier.validate_block(
+    # Pull by block hash & verify.
+    block: Block = verifier.verify_block(
         await network.get_block(block_hash)
     )
 
-    # Descend & validate historical blocks. 
+    # Pull historical blocks & verify. 
     while block.is_switch is False:
-        block: Block = verifier.validate_block(
+        block: Block = verifier.verify_block(
             await network.get_block(block.header.parent_hash)
         )
 
-    # Return validated switch block.
-    return verifier.validate_switch_block(block)
+    # Return verified switch block.
+    return block
 
 
 async def ascend_until_tip(
     block: Block,
     parent_block: Block,
     switch_block: Block
-) -> typing.Generator:
+) -> typing.Generator[Block, None, None]:
     """Yields future blocks until chain tip is reached.
     
     :param block: A block from which to ascend.
@@ -44,7 +44,7 @@ async def ascend_until_tip(
 
     """
     if block is None and parent_block is None:
-        block = parent_block = verifier.validate_switch_block(switch_block)
+        block = parent_block = verifier.verify_block(switch_block)
 
     # Set current chain height.
     chain_height: int = await network.get_chain_height()
@@ -52,14 +52,13 @@ async def ascend_until_tip(
     # Ascend until current chain height.
     while block.header.height < chain_height:
         try:
-            block: Block = verifier.validate_block(
+            block: Block = verifier.verify_block(
                 await network.get_block(parent_block.height + 1),
                 switch_block,
             )
         except NodeRpcProxyError as err:
-            print(err)
-            # TODO: define exception policy/handling.
-            return
+            # TODO: error policy coud be to try other nodes
+            raise err
         else:
             parent_block: Block = block
             if block.is_switch:
