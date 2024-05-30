@@ -24,7 +24,7 @@ class BlockType(enum.Enum):
 
 @dataclasses.dataclass
 class BlockInfo():
-    """Summary information over a verified block.
+    """Verified information scoped by block.
     
     """
     era_id: EraID
@@ -51,22 +51,42 @@ class BlockInfo():
 
 
 @dataclasses.dataclass
-class EraConsensusWeights():
-    """Summary information over a verified era.
+class BlockRange():
+    # Height of first block within era.
+    begin: int
+
+    # Height of last block within era.
+    end: int = None
+
+
+@dataclasses.dataclass
+class EraInfo():
+    """Verified information scoped by era.
     
     """
+    # Range of verified blocks within era.
+    block_range: BlockRange
+
+    # ID of era.
     era_id: EraID
+
+    # Validator finality signature weights.   
     weights: typing.List[ValidatorWeight]
 
     @staticmethod
-    def from_block(block: Block) -> "EraConsensusWeights":
-        return EraConsensusWeights(
+    def from_block(block: Block) -> "EraInfo":
+        return EraInfo(
+            block_range=BlockRange(begin=block.header.height + 1),
             era_id=block.header.era_id + 1,
             weights=block.header.era_end.next_era_validator_weights
         )
 
     def to_dict(self) -> dict:
         return {
+            "block_range": {
+                "begin": self.block_range.begin,
+                "end": self.block_range.end,
+            },
             "era_id": self.era_id,
             "weights": [{
                 "validator": i.validator.to_hex(),

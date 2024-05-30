@@ -7,9 +7,9 @@ from pylitmus.types import BlockInfo
 
 
 def set(entity: BlockInfo) -> str:
-    """Encaches a verified block.
+    """Encaches verified block information.
 
-    :param block: Block data to be cached.
+    :param entity: Block information to be cached.
     :returns: Cache key.
 
     """
